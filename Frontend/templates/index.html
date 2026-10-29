@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f7f5">
+  <title>Festtest Web | Teste de velocidade</title>
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='motion.css') }}">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Festtest início"><span class="brand-mark">F</span><span>Festtest <span class="brand-accent">Web</span></span></a>
+      <div class="status-pill"><span class="status-dot" id="status-dot"></span><span id="test-state">PRONTO PARA ANALISAR</span></div>
+    </header>
+
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-dot"></span> DIAGNÓSTICO DA CONEXÃO</p>
+        <h1 id="hero-title">Sua internet,<br><span>sem dúvidas.</span></h1>
+        <p class="hero-description" id="analysis-copy">Meça a velocidade real da sua conexão neste dispositivo.</p>
+      </div>
+      <div class="hero-mark" aria-hidden="true"><span class="hero-orbit orbit-a"></span><span class="hero-orbit orbit-b"></span><span class="hero-icon">≈</span><span class="signal signal-one"></span><span class="signal signal-two"></span></div>
+      <div class="hero-tags"><span><i class="tag-icon download-icon">↓</i> Download</span><span><i class="tag-icon upload-icon">↑</i> Upload</span><span><i class="tag-icon ping-icon">◉</i> Ping e jitter</span></div>
+    </section>
+
+    <section class="connection-card" aria-label="Informações da conexão">
+      <div class="connection-symbol" aria-hidden="true">⌁</div>
+      <div class="connection-info"><span class="field-label">SUA CONEXÃO</span><strong id="connection-label">Conexão ativa neste navegador</strong><span class="field-sub" id="user-ip">IPv6 público: será verificado no teste</span></div>
+      <div class="server-info"><span class="field-label">SELECIONAR ANFITRIÃO</span><button class="host-picker-button" id="open-host-picker" type="button" aria-haspopup="dialog" aria-controls="host-picker"><span id="selected-host-name">Carregando anfitriões...</span><span aria-hidden="true">⌄</span></button><select class="host-select" id="host-select" aria-hidden="true" tabindex="-1" disabled><option value="auto">Automático</option></select><span class="field-sub" id="host-description">Escolha um servidor ou use a seleção automática</span></div>
+      <span class="connection-check" aria-label="Conexão pronta">✓</span>
+    </section>
+
+    <dialog class="host-picker" id="host-picker" aria-labelledby="host-picker-title">
+      <header class="host-picker-header">
+        <h2 id="host-picker-title">Selecionar anfitrião</h2>
+        <button class="host-picker-close" id="close-host-picker" type="button" aria-label="Fechar">×</button>
+      </header>
+      <div class="host-picker-search"><span aria-hidden="true">⌕</span><input id="host-search" type="search" placeholder="Nome do anfitrião" autocomplete="off"></div>
+      <button class="auto-host-option" id="select-auto-host" type="button"><span aria-hidden="true">➤</span> Selecionar automaticamente</button>
+      <div class="host-picker-list" id="host-picker-list" aria-live="polite"></div>
+      <p class="host-picker-empty" id="host-picker-empty" hidden>Nenhum anfitrião encontrado.</p>
+      <p class="host-picker-note">Servidores de Manaus fornecidos pela rede Speedtest.</p>
+    </dialog>
+
+    <section class="results-card" id="results-card" aria-labelledby="results-title">
+      <div class="results-heading"><div><p class="eyebrow">MEDIÇÃO POR ETAPAS</p><h2 id="results-title">Desempenho da sua internet</h2></div><span class="live-indicator" id="live-indicator" aria-live="polite"><i></i><span id="phase-label">AGUARDANDO TESTE</span></span></div>
+      <ol class="test-steps" id="test-steps" aria-label="Etapas da medição">
+        <li class="test-step" data-step="0"><span class="step-mark">1</span><span>Ping</span></li>
+        <li class="test-step" data-step="1"><span class="step-mark">2</span><span>Download</span></li>
+        <li class="test-step" data-step="2"><span class="step-mark">3</span><span>Upload</span></li>
+        <li class="test-step" data-step="3"><span class="step-mark">✓</span><span>Finalizado</span></li>
+      </ol>
+      <div class="speed-grid">
+        <article class="speed-metric download-metric"><div class="metric-title"><span class="metric-icon">↓</span><span>Download</span></div><div class="metric-value"><strong id="download-value">—</strong><span>Mbps</span></div><div class="speed-track" aria-hidden="true"><span class="speed-fill" id="download-fill"></span></div><p>Recebimento de dados</p></article>
+        <article class="speed-metric upload-metric"><div class="metric-title"><span class="metric-icon">↑</span><span>Upload</span></div><div class="metric-value"><strong id="upload-value">—</strong><span>Mbps</span></div><div class="speed-track" aria-hidden="true"><span class="speed-fill" id="upload-fill"></span></div><p>Envio de dados</p></article>
+      </div>
+      <div class="detail-grid">
+        <div class="detail-metric"><span class="detail-icon ping-color">◉</span><div><span>Ping</span><strong><b id="ping-value">—</b> <small>ms</small></strong></div></div>
+        <div class="detail-metric"><span class="detail-icon jitter-color">⌁</span><div><span>Jitter</span><strong><b id="jitter-value">—</b> <small>ms</small></strong></div></div>
+        <div class="detail-metric"><span class="detail-icon quality-color">⌁</span><div><span>Anfitrião medido</span><strong><b id="measured-host">—</b></strong></div></div>
+      </div>
+      <p class="test-error" id="test-error" role="alert" hidden></p>
+      <div class="action-row"><button class="run-button" id="run-test" type="button" disabled><span class="button-icon">▶</span><span id="button-label">Carregando anfitriões...</span></button><span class="test-hint" id="test-hint">O teste consome dados da sua conexão.</span></div>
+    </section>
+
+    <aside class="accuracy-note"><span class="note-icon">i</span><p>O teste é executado no navegador contra o anfitrião selecionado. Ao iniciar, a API da Speedtest.net recebe uma consulta para verificar IPv6. Cada servidor pode produzir resultados diferentes conforme a distância, a rota e a carga da rede. Use a seleção automática para escolher o ponto com menor ping.</p></aside>
+    <footer><span>FESTTEST WEB</span><span>Resultados medidos neste dispositivo</span></footer>
+  </main>
+  <script src="{{ url_for('static', filename='librespeed.js') }}"></script>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

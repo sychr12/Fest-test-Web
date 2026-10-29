@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Velocidade</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+        
+        :root {
+            --primary: #2563eb;
+            --primary-light: #3b82f6;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --border: #e2e8f0;
+            --text: #334155;
+            --text-light: #64748b;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+        
+        .elegant-container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 560px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .elegant-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+        }
+        
+        h1 {
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 24px;
+            margin-top: 0;
+            margin-bottom: 8px;
+        }
+        
+        .subtitle {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+        
+        .connection-info {
+            display: flex;
+            gap: 16px;
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .connection-info span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .connection-info i {
+            font-size: 16px;
+        }
+        
+        .test-wrapper {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .test-column {
+            flex: 1;
+        }
+        
+        .test-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .test-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .download-icon {
+            background-color: var(--primary);
+        }
+        
+        .upload-icon {
+            background-color: var(--secondary);
+        }
+        
+        .test-title {
+            font-weight: 500;
+            font-size: 16px;
+        }
+        
+        .speed-result {
+            font-size: 32px;
+            font-weight: 600;
+            margin: 16px 0;
+            letter-spacing: -0.5px;
+        }
+        
+        .download-speed {
+            color: var(--primary);
+        }
+        
+        .upload-speed {
+            color: var(--secondary);
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        
+        .metric-card {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+        }
+        
+        .metric-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .metric-label {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+        
+        .speed-scale {
+            height: 8px;
+            background-color: var(--border);
+            border-radius: 4px;
+            margin: 32px 0 16px;
+            position: relative;
+        }
+        
+        .speed-indicator {
+            position: absolute;
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 1s ease-out;
+        }
+        
+        .scale-marks {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-light);
+        }
+        
+        .test-button {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 24px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .test-button:hover {
+            background-color: var(--primary-light);
+            transform: translateY(-1px);
+        }
+        
+        .test-button i {
+            font-size: 18px;
+            transition: transform 0.3s;
+        }
+        
+        .test-button:hover i {
+            transform: rotate(360deg);
+        }
+        
+        @media (max-width: 640px) {
+            .elegant-container {
+                padding: 32px 24px;
+                border-radius: 0;
+            }
+            
+            .test-wrapper {
+                flex-direction: column;
+                gap: 32px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="elegant-container">
+        <h1>Teste de Velocidade</h1>
+        <p class="subtitle">Verifique a performance da sua conexão de internet</p>
+        
+        <div class="connection-info">
+            <span><i class="fas fa-ip-address"></i> 177.149.79.235</span>
+            <span><i class="fas fa-server"></i> Servidor de Teste</span>
+        </div>
+        
+        <div class="test-wrapper">
+            <div class="test-column">
+                <div class="test-header">
+                    <div class="test-icon download-icon">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <div class="test-title">Download</div>
+                </div>
+                <div class="speed-result download-speed">0 Mbps</div>
+                
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value ping-value">-</div>
+                        <div class="metric-label">Ping</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value jitter-value">-</div>
+                        <div class="metric-label">Jitter</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="test-column">
+                <div class="test-header">
+                    <div class="test-icon upload-icon">
+                        <i class="fas fa-upload"></i>
+                    </div>
+                    <div class="test-title">Upload</div>
+                </div>
+                <div class="speed-result upload-speed">0 Mbps</div>
+                
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value cping-value">-</div>
+                        <div class="metric-label">CPing</div>
+                    </div>
+                    <div class="metric-card" style="visibility: hidden;">
+                        <!-- Empty space to align grid -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="speed-scale">
+            <div class="speed-indicator" id="speedIndicator"></div>
+        </div>
+        <div class="scale-marks">
+            <span>0</span>
+            <span>100</span>
+            <span>250</span>
+            <span>500</span>
+            <span>750</span>
+            <span>1000 Mbps</span>
+        </div>
+        
+        <button class="test-button" id="runTest">
+            <i class="fas fa-sync-alt"></i>
+            Executar Teste
+        </button>
+    </div>
+    
+    <script>
+        document.getElementById('runTest').addEventListener('click', function() {
+            const button = this;
+            button.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Testando...';
+            button.disabled = true;
+            
+            // Reset values
+            document.querySelector('.download-speed').textContent = '0 Mbps';
+            document.querySelector('.upload-speed').textContent = '0 Mbps';
+            document.querySelector('.ping-value').textContent = '-';
+            document.querySelector('.jitter-value').textContent = '-';
+            document.querySelector('.cping-value').textContent = '-';
+            document.getElementById('speedIndicator').style.width = '0%';
+            
+            // Simulate test sequence
+            setTimeout(() => {
+                // Ping result
+                document.querySelector('.ping-value').textContent = Math.floor(Math.random() * 25) + 5 + ' ms';
+                
+                // Download test
+                let downloadProgress = 0;
+                const downloadInterval = setInterval(() => {
+                    downloadProgress += Math.random() * 15;
+                    if (downloadProgress >= 100) {
+                        clearInterval(downloadInterval);
+                        const downloadSpeed = Math.floor(Math.random() * 700) + 100;
+                        document.querySelector('.download-speed').textContent = downloadSpeed + ' Mbps';
+                        document.getElementById('speedIndicator').style.width = Math.min(100, (downloadSpeed / 1000) * 100) + '%';
+                        document.querySelector('.jitter-value').textContent = (Math.random() * 4).toFixed(1) + ' ms';
+                        
+                        // Start upload test
+                        simulateUpload();
+                    }
+                }, 30);
+            }, 800);
+            
+            function simulateUpload() {
+                let uploadProgress = 0;
+                const uploadInterval = setInterval(() => {
+                    uploadProgress += Math.random() * 8;
+                    if (uploadProgress >= 100) {
+                        clearInterval(uploadInterval);
+                        const uploadSpeed = Math.floor(Math.random() * 200) + 30;
+                        document.querySelector('.upload-speed').textContent = uploadSpeed + ' Mbps';
+                        document.querySelector('.cping-value').textContent = Math.floor(Math.random() * 15) + 10 + ' ms';
+                        
+                        // Reset button
+                        setTimeout(() => {
+                            button.innerHTML = '<i class="fas fa-sync-alt"></i> Testar Novamente';
+                            button.disabled = false;
+                        }, 500);
+                    }
+                }, 40);
+            }
+        });
+    </script>
+</body>
+</html>
